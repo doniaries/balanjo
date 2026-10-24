@@ -23,10 +23,10 @@ class UsahaResource extends Resource
     protected static ?string $model = Usaha::class;
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-building-storefront';
-    
+
     public static function getNavigationGroup(): ?string
     {
-        return 'Sistem Admin';
+        return 'Pengaturan';
     }
 
     // Membatasi HANYA SUPERADMIN yang bisa melihat menu ini
@@ -34,7 +34,7 @@ class UsahaResource extends Resource
     {
         /** @var \App\Models\User|null $user */
         $user = \Illuminate\Support\Facades\Auth::user();
-        
+
         return $user?->tipe === 'superadmin';
     }
 
@@ -66,12 +66,12 @@ class UsahaResource extends Resource
                     ->sortable(),
                 TextColumn::make('paket')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
+                    ->color(fn(string $state): string => match ($state) {
                         'free' => 'gray',
                         'premium' => 'success',
                         default => 'primary',
                     })
-                    ->formatStateUsing(fn (string $state) => strtoupper($state)),
+                    ->formatStateUsing(fn(string $state) => strtoupper($state)),
                 ToggleColumn::make('is_active')
                     ->label('Aktif?'),
                 TextColumn::make('created_at')
@@ -93,8 +93,8 @@ class UsahaResource extends Resource
                     ->icon('heroicon-o-star')
                     ->color('warning')
                     ->requiresConfirmation()
-                    ->hidden(fn (Usaha $record) => $record->isPremium())
-                    ->action(fn (Usaha $record) => $record->update(['paket' => 'premium'])),
+                    ->hidden(fn(Usaha $record) => $record->isPremium())
+                    ->action(fn(Usaha $record) => $record->update(['paket' => 'premium'])),
 
                 // Tombol aksi cepat untuk turun ke Free
                 Action::make('downgrade')
@@ -102,8 +102,8 @@ class UsahaResource extends Resource
                     ->icon('heroicon-o-arrow-down-tray')
                     ->color('danger')
                     ->requiresConfirmation()
-                    ->hidden(fn (Usaha $record) => $record->isFree())
-                    ->action(fn (Usaha $record) => $record->update(['paket' => 'free'])),
+                    ->hidden(fn(Usaha $record) => $record->isFree())
+                    ->action(fn(Usaha $record) => $record->update(['paket' => 'free'])),
                 EditAction::make(),
             ])
             ->toolbarActions([
